@@ -21,6 +21,7 @@ public class turnManager : MonoBehaviour
         //singleton reference
         if (instance != null)
         {
+            Debug.LogError("More than one instance of turnManager found!");
             Destroy(this);
         }
 
@@ -31,8 +32,9 @@ public class turnManager : MonoBehaviour
     void Start()
     {
         //start in waiting
-        turn = turns.waiting; //WE WILL WAIT A FEW SECONDS IN THE BEGINNING BEFORE STARTING
+        //turn = turns.waiting; //WE WILL WAIT A FEW SECONDS IN THE BEGINNING BEFORE STARTING
 
+        turn = turns.player1Record; //FOR TESTING PURPOSES, START DIRECTLY WITH PLAYER 1 RESPOND
     }
 
     // Update is called once per frame
@@ -40,4 +42,28 @@ public class turnManager : MonoBehaviour
     {
         
     }
+
+    public void NextTurn()
+    {
+        switch (turn)
+        {
+
+            case turns.player1Record:
+                turn = turns.player2Respond;
+                break;
+            case turns.player1Respond:
+                turn = turns.player1Record;
+                break;
+            case turns.player2Record:
+                turn = turns.player1Respond;
+                break;
+            case turns.player2Respond:
+                turn = turns.player2Record;
+                break;
+
+
+        }
+    }
+
+
 }
