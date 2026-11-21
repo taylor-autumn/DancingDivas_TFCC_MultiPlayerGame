@@ -265,6 +265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1737451948}
+  - component: {fileID: 1737451953}
   - component: {fileID: 1737451949}
   - component: {fileID: 1737451950}
   - component: {fileID: 1737451951}
@@ -306,9 +307,14 @@ MonoBehaviour:
   bpm: 120
   meterNumerator: 4
   meterDenominator: 4
+  recordInputWindow: 0.2
+  currentBeatIndex: 0
+  player1BeatsMap: 0000000000000000
+  player2BeatsMap: 0000000000000000
   audioSource: {fileID: 1737451950}
-  beatTic: {fileID: 8300000, guid: 0059affd060de984c93ab8bdee077450, type: 3}
-  beatTac: {fileID: 8300000, guid: f2fbfe32f01729f4b877a84161a15a89, type: 3}
+  beatTic: {fileID: 8300000, guid: f2fbfe32f01729f4b877a84161a15a89, type: 3}
+  beatTac: {fileID: 8300000, guid: 0059affd060de984c93ab8bdee077450, type: 3}
+  beatReplay: {fileID: 8300000, guid: 603aeab86c767d04eb1ca3ddd0c03f78, type: 3}
 --- !u!82 &1737451950
 AudioSource:
   m_ObjectHideFlags: 0
@@ -480,6 +486,19 @@ MonoBehaviour:
   m_DefaultActionMap: Player1Input
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1737451953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737451947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b80ae46ec38b64d49beefac605bf48a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::turnManager
+  turn: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
