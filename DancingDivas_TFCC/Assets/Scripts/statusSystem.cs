@@ -7,12 +7,29 @@ public class statusSystem : MonoBehaviour
 {
 
     [Header("Player 1 Stats")]
-    public int player1Lives;
+    public int player1Lives = 3;
     public int player1Stamina = 100;
+    public List<GameObject> player1Hearts;
+    public int player1HeartsIndex=0;
+    public bool player1Dead = false;
 
     [Header("Player 2 Stats")]
-    public int player2Lives;
+    public int player2Lives = 3;
     public int player2Stamina = 100;
+    public List<GameObject> player2Hearts;
+    public int player2HeartsIndex=0;
+    public bool player2Dead = false;
+
+    [Header("Heart Sprites/Images")]
+    public Sprite fullHeart;
+    public Sprite brokenHeart;
+
+    [Header("Stamina Slider Stuff")]
+    public Slider player1StaminaSlider;
+    public Slider player2StaminaSlider;
+
+    [Header("Sounds")]
+    public AudioClip loseHeartSound;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
