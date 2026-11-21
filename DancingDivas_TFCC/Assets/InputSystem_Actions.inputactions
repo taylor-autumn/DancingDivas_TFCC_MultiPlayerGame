@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "InputSystem_Actions",
     "maps": [
         {
@@ -986,6 +987,54 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayersInput",
+            "id": "1430051e-c2be-4a19-90c7-7c575c5634dd",
+            "actions": [
+                {
+                    "name": "Player1Button",
+                    "type": "Button",
+                    "id": "9dced57f-8b03-4c53-b586-72a0642891c1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Player2Button",
+                    "type": "Button",
+                    "id": "c3fdfa95-962a-438f-a53e-f53eb69fe26d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "756ec76b-f256-460e-a92a-3eb347558eb8",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player1Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9e57e4d2-cb21-40c7-b4e7-1dced5e509a8",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Player2Button",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -1,0 +1,63 @@
+{
+    "version": 1,
+    "name": "MultiPlayersInputMap",
+    "maps": [
+        {
+            "name": "Player1Input",
+            "id": "7ec2d9ca-ca70-450f-8b43-b83b449438c6",
+            "actions": [
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "36114ac0-aa96-41e0-96f5-967a0e546325",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2f977dd1-672b-454b-b73e-f25ec68d673a",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player2Input",
+            "id": "65809589-d366-4d71-851e-2d50c484d109",
+            "actions": [
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "a9c90c56-8071-436f-9682-fc2421719cbc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "f12b6438-d88f-481a-a18d-0970dace1297",
+                    "path": "<Keyboard>/rightShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
