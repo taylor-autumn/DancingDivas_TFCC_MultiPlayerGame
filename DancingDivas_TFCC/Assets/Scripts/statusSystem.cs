@@ -8,14 +8,14 @@ public class statusSystem : MonoBehaviour
 
     [Header("Player 1 Stats")]
     public int player1Lives = 3;
-    public int player1Stamina = 100;
+    public int player1Stamina = 50;
     public List<GameObject> player1Hearts;
     public int player1HeartsIndex=0;
     public bool player1Dead = false;
 
     [Header("Player 2 Stats")]
     public int player2Lives = 3;
-    public int player2Stamina = 100;
+    public int player2Stamina = 50;
     public List<GameObject> player2Hearts;
     public int player2HeartsIndex=0;
     public bool player2Dead = false;
@@ -26,7 +26,9 @@ public class statusSystem : MonoBehaviour
 
     [Header("Stamina Slider Stuff")]
     public Slider player1StaminaSlider;
+    public Image player1SliderFill;
     public Slider player2StaminaSlider;
+    public Image player2SliderFill;
 
     [Header("Sounds")]
     public AudioClip loseHeartSound;
@@ -71,13 +73,65 @@ public class statusSystem : MonoBehaviour
 
             if (player1Lives == 0)
             {
-                print("PLaYER 1 LOSE"); //player 1 LOSE BY LOSS OF HEaRTS =============================================
+                print("PLaYER 1 LOSE BY LIVES"); //player 1 LOSE BY LOSS OF HEaRTS =============================================
                 turnManager.instance.turn = turnManager.turns.end;
                 player1Dead = true;
             }
             else if (player2Lives == 0)
             {
-                print("PLAYER 2 LOSE"); //player 2 LOSE BY LOSS OF HEaRTS =============================================
+                print("PLAYER 2 LOSE BY STAMINA"); //player 2 LOSE BY LOSS OF HEaRTS =============================================
+                turnManager.instance.turn = turnManager.turns.end;
+                player2Dead = true;
+            }
+        }
+        else
+        {
+            if (player1Lives == 0)
+            {
+                Debug.LogWarning("Not going bc player 1 is dead");
+            }
+            else if (player2Lives == 0)
+            {
+                Debug.LogWarning("Not going bc player 2 is dead");
+            }
+        }
+    }
+
+    public void loseStamina(string player)
+    {
+        if (!player1Dead && !player2Dead)
+        {
+            //play the sound?===================================
+
+            if (player == "player1")
+            {
+                player1StaminaSlider.value -= 1;
+                player1Stamina -= 1;
+                //determine if slider is visible
+                player1SliderFill.enabled = player1Stamina > 0;
+                
+            }
+            else if (player == "player2")
+            {
+                player2StaminaSlider.value -= 1;
+                player2Stamina -= 1;
+                //determine if slider is visible
+                player2SliderFill.enabled = player2Stamina > 0;
+            }
+            else
+            {
+                Debug.LogError("You put in something wrong in the loseStamina function");
+            }
+
+            if (player1Stamina == 0)
+            {
+                print("PLAYER 1 LOSE BY STAMINA"); //player 1 LOSE BY LOSS OF HEaRTS =============================================
+                turnManager.instance.turn = turnManager.turns.end;
+                player1Dead = true;
+            }
+            else if (player2Stamina == 0)
+            {
+                print("PLAYER 2 LOSE BY STAMINA"); //player 2 LOSE BY LOSS OF HEaRTS =============================================
                 turnManager.instance.turn = turnManager.turns.end;
                 player2Dead = true;
             }
