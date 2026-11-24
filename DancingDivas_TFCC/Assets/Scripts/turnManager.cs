@@ -4,6 +4,8 @@ using UnityEngine;
 public class turnManager : MonoBehaviour
 {
     public static turnManager instance;
+    [SerializeField] private rhythmSystem rhythmSystemInstance;
+
     public enum turns
     {
         waiting,
@@ -50,18 +52,41 @@ public class turnManager : MonoBehaviour
 
             case turns.player1Record:
                 turn = turns.player2Respond;
+                StartCurrentTurn();
                 break;
             case turns.player1Respond:
                 turn = turns.player1Record;
+                StartCurrentTurn();
                 break;
             case turns.player2Record:
                 turn = turns.player1Respond;
+                StartCurrentTurn();
                 break;
             case turns.player2Respond:
                 turn = turns.player2Record;
+                StartCurrentTurn();
                 break;
 
 
+        }
+    }
+
+    void StartCurrentTurn()
+    {
+        switch (turn)
+        {
+            case turns.player1Record:
+                rhythmSystemInstance.StartRecording(turn);
+                break;
+            case turns.player1Respond:
+                rhythmSystemInstance.StartResponding(turn);
+                break;
+            case turns.player2Record:
+                rhythmSystemInstance.StartRecording(turn);
+                break;
+            case turns.player2Respond:
+                rhythmSystemInstance.StartResponding(turn);
+                break;
         }
     }
 
