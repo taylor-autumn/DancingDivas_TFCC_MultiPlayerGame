@@ -26,18 +26,10 @@ public class statusSystem : MonoBehaviour
 
     [Header("Stamina Slider Stuff")]
     public Slider player1StaminaSlider;
-    public Image player1SliderFill;
     public Slider player2StaminaSlider;
-    public Image player2SliderFill;
 
     [Header("Sounds")]
     public AudioClip loseHeartSound;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
     public void loseHeart(string player)
     {
@@ -101,22 +93,22 @@ public class statusSystem : MonoBehaviour
     {
         if (!player1Dead && !player2Dead)
         {
-            //play the sound?===================================
+            //CHAR THIS IS WHERE SOUND WOULD PLAY IF WE ARE PLAYING ONE WHEN WE DANCE================
 
             if (player == "player1")
             {
                 player1StaminaSlider.value -= 1;
                 player1Stamina -= 1;
-                //determine if slider is visible
-                player1SliderFill.enabled = player1Stamina > 0;
-                
+                //determine if slider is visible ** NOT USING SINCE IT WORKS WITHOUT THIS
+                //player1SliderFill.enabled = player1Stamina > 0;
+
             }
             else if (player == "player2")
             {
                 player2StaminaSlider.value -= 1;
                 player2Stamina -= 1;
-                //determine if slider is visible
-                player2SliderFill.enabled = player2Stamina > 0;
+                //determine if slider is visible ** NOT USING SINCE IT WORKS WITHOUT THIS
+                //player2SliderFill.enabled = player2Stamina > 0;
             }
             else
             {
@@ -138,11 +130,11 @@ public class statusSystem : MonoBehaviour
         }
         else
         {
-            if (player1Lives == 0)
+            if (player1Stamina == 0)
             {
                 Debug.LogWarning("Not going bc player 1 is dead");
             }
-            else if (player2Lives == 0)
+            else if (player2Stamina == 0)
             {
                 Debug.LogWarning("Not going bc player 2 is dead");
             }
