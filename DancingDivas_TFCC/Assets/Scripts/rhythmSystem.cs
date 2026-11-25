@@ -24,7 +24,8 @@ public class rhythmSystem : MonoBehaviour
     [SerializeField] private int currentBeatIndex = 0;
 
     //private bool[] recordingBeats = new bool[8];
-    private bool[] targetBeats = new bool[8];
+    private bool[] targetBeatsMap = new bool[8];
+    private bool[] replayBeatsMap = new bool[8];
 
     [SerializeField] private bool[] player1BeatsMap = new bool[8];
     [SerializeField] private bool[] player2BeatsMap = new bool[8];
@@ -33,6 +34,7 @@ public class rhythmSystem : MonoBehaviour
 
     private float beatTimer = 0f;
     private bool pendingFirstBeat;
+
 
 
     //Audio
@@ -79,13 +81,12 @@ public class rhythmSystem : MonoBehaviour
             {
 
                 turnManager.instance.NextTurn();
-                StartCurrentTurn();
             }
 
             var currentTurn = turnManager.instance.turn;
             if(currentTurn == turnManager.turns.player1Respond || currentTurn == turnManager.turns.player2Respond)
             {
-                ReplayBeatsMap(targetBeats);
+                ReplayBeatsMap(targetBeatsMap);
             }
 
 
@@ -93,24 +94,7 @@ public class rhythmSystem : MonoBehaviour
 
     }
 
-    void StartCurrentTurn()
-    {
-        switch(turnManager.instance.turn)
-        {
-            case turnManager.turns.player1Record:
-                StartRecording(player1BeatsMap);
-                break;
-            case turnManager.turns.player1Respond:
-                StartResponding(player2BeatsMap);
-                break;
-            case turnManager.turns.player2Record:
-                StartRecording(player2BeatsMap);
-                break;
-            case turnManager.turns.player2Respond:
-                StartResponding(player1BeatsMap);
-                break;
-        }
-    }
+
 
 
 
@@ -193,14 +177,29 @@ public class rhythmSystem : MonoBehaviour
 
     }
 
-    void StartRecording(bool[] playerBeatMap)
+    public void StartRecording(turnManager.turns turn)
     {
-        ClearBeatsMap(playerBeatMap);
+        if (turn == turnManager.turns.player1Record)
+        {
+            ClearBeatsMap(player1BeatsMap);
+        }
+        else if (turn == turnManager.turns.player2Record)
+        {
+            ClearBeatsMap(player2BeatsMap);
+        }
+
     }
 
-    void StartResponding(bool[] playerBeatMap)
+    public void StartResponding(turnManager.turns turn)
     {
-        targetBeats = playerBeatMap;
+        if (turn == turnManager.turns.player1Respond)
+        {
+            targetBeatsMap = player2BeatsMap;
+        }
+        else if (turn == turnManager.turns.player2Respond)
+        {
+            targetBeatsMap = player1BeatsMap;
+        }
 
     }
 
