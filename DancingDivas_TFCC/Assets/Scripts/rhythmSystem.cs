@@ -30,10 +30,25 @@ public class rhythmSystem : MonoBehaviour
     [SerializeField] private bool[] player1BeatsMap = new bool[8];
     [SerializeField] private bool[] player2BeatsMap = new bool[8];
 
+    [SerializeField] private SpriteRenderer[] player1BeatSprites;
+    [SerializeField] private SpriteRenderer[] player2BeatSprites;
+
 
 
     private float beatTimer = 0f;
     private bool pendingFirstBeat;
+    [SerializeField] private float successRecordTimeRange = 0.15f; // Time range for successful beat recording
+    [SerializeField] private bool[] recordAttempted = new bool[8];
+
+    [SerializeField] private float successRespondTimeRange = 0.15f; // Time range for successful beat replay
+    [SerializeField] private bool[] respondAttempted = new bool[8];
+
+
+
+    [Header("Beat Indicator")]
+    [SerializeField] private RectTransform beatBar;
+    [SerializeField] private RectTransform beatIndicator;
+    
 
 
 
@@ -42,6 +57,7 @@ public class rhythmSystem : MonoBehaviour
     [SerializeField] private AudioClip beatTic;
     [SerializeField] private AudioClip beatTac;
     [SerializeField] private AudioClip beatReplay;
+    [SerializeField] private AudioClip successRespondSound;
 
 
 
@@ -63,6 +79,8 @@ public class rhythmSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        ShowBeatsMap(player1BeatsMap, player1BeatSprites);
+        ShowBeatsMap(player2BeatsMap, player2BeatSprites);
 
         //Timer every beat
         beatTimer += Time.deltaTime;
@@ -75,6 +93,7 @@ public class rhythmSystem : MonoBehaviour
 
             //update the burrent beat index (+1 everytime, back to 0 if end)
             BeatsCounting();
+
 
             //if is the first beat, clear the map for the next round
             if (currentBeatIndex == 0)
@@ -91,6 +110,9 @@ public class rhythmSystem : MonoBehaviour
 
 
         }
+        UpdateBeatIndicator();
+
+
 
     }
 
@@ -113,6 +135,41 @@ public class rhythmSystem : MonoBehaviour
 
     }
 
+    private void UpdateBeatIndicator()
+    {
+        //betTimer / beatInterval gives us the progress within the current beat (0 to 1)
+
+        float progress = (currentBeatIndex + (beatTimer / beatInterval)) / (meterNumerator * 2);
+
+        float halfWidth = beatBar.rect.width / 2f;
+        Vector2 IndicatorPosition = beatIndicator.anchoredPosition;
+
+        switch (turnManager.instance.turn)
+        {
+            case turnManager.turns.player1Record:
+                IndicatorPosition.x = Mathf.Lerp(-halfWidth, 0, progress);
+                break;
+            case turnManager.turns.player2Respond:
+                IndicatorPosition.x = Mathf.Lerp(0, halfWidth, progress);
+                break;
+            case turnManager.turns.player2Record:
+                IndicatorPosition.x = Mathf.Lerp(halfWidth, 0, progress);
+                break;
+            case turnManager.turns.player1Respond:
+                IndicatorPosition.x = Mathf.Lerp(0, -halfWidth, progress);
+                break;
+
+            default:
+                return;
+        }
+
+        beatIndicator.anchoredPosition = IndicatorPosition;
+
+    }
+
+
+
+    //When player press
     public void OnInteract(InputValue input)
     {
         if (!input.isPressed)
@@ -123,11 +180,11 @@ public class rhythmSystem : MonoBehaviour
         if (turnManager.instance.turn == turnManager.turns.player1Record)
         {
             RecordBeat(player1BeatsMap);
-            audioSource.PlayOneShot(beatReplay);
+            //audioSource.PlayOneShot(beatReplay);
         }
         else if (turnManager.instance.turn == turnManager.turns.player2Record)
         {
-            audioSource.PlayOneShot(beatReplay);
+            //audioSource.PlayOneShot(beatReplay);
             RecordBeat(player2BeatsMap);
         }
         else
@@ -135,34 +192,45 @@ public class rhythmSystem : MonoBehaviour
             
         }
 
+        if (turnManager.instance.turn == turnManager.turns.player1Respond)
+        {
+            RespondBeatsMap(player1BeatsMap);
+
+        }
+        if (turnManager.instance.turn == turnManager.turns.player2Respond)
+        {
+            RespondBeatsMap(player2BeatsMap);
+        }
 
     }
 
 
     void RecordBeat(bool[] playerBeatMap)
     {
+        int index = currentBeatIndex;
+        float timeError = beatTimer;
 
+        if (beatTimer >= beatInterval / 2)
+        {
+            index++;
+            timeError = beatInterval - beatTimer;
 
-        if (pendingFirstBeat)
-        {
-            pendingFirstBeat = false;
         }
-        if (beatTimer < beatInterval / 2)
-        {
-            playerBeatMap[currentBeatIndex] = true;
-        }
-        else if (beatTimer >= beatInterval / 2)
-        {
-            if (currentBeatIndex + 1 < playerBeatMap.Length)
-            {
-                playerBeatMap[currentBeatIndex + 1] = true;
-            }
-            else
-            {
-                pendingFirstBeat = true;
-            }
-                
-        }
+
+        if (index >= playerBeatMap.Length)
+            return;
+
+        if (recordAttempted[index])
+            return;
+
+        recordAttempted[index] = true;
+
+        if (timeError > successRecordTimeRange)
+            return;
+
+        playerBeatMap[index] = true;
+        audioSource.PlayOneShot(beatReplay);
+
 
     }
 
@@ -177,15 +245,47 @@ public class rhythmSystem : MonoBehaviour
 
     }
 
+    void RespondBeatsMap(bool[] playerBeatMap)
+    {
+        int index = currentBeatIndex;
+        float timeError = beatTimer;
+
+        if (beatTimer >= beatInterval / 2)
+        {
+            index++;
+            timeError = beatInterval - beatTimer;
+
+        }
+
+        if (index >= playerBeatMap.Length)
+            return;
+
+        if (respondAttempted[index])
+            return;
+
+        respondAttempted[index] = true;
+
+        if (timeError > successRespondTimeRange)
+            return;
+
+
+        //Successful response
+        audioSource.PlayOneShot(successRespondSound);
+
+    }
+
+
     public void StartRecording(turnManager.turns turn)
     {
         if (turn == turnManager.turns.player1Record)
         {
             ClearBeatsMap(player1BeatsMap);
+            Array.Clear(recordAttempted, 0, recordAttempted.Length);
         }
         else if (turn == turnManager.turns.player2Record)
         {
             ClearBeatsMap(player2BeatsMap);
+            Array.Clear(recordAttempted, 0, recordAttempted.Length);
         }
 
     }
@@ -208,6 +308,15 @@ public class rhythmSystem : MonoBehaviour
     void ClearBeatsMap(bool[] playerBeatMap)
     {
         Array.Clear(playerBeatMap, 0, playerBeatMap.Length);
+    }
+
+
+    void ShowBeatsMap(bool[] playerBeatMap, SpriteRenderer[] sprites)
+    {
+        for (int i = 0; i < playerBeatMap.Length; i++)
+        {
+            sprites[i].enabled = playerBeatMap[i];
+        }
     }
 
 
